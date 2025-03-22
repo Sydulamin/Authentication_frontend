@@ -14,38 +14,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js (use '16.x' for the latest LTS version)
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # This uses Node.js version 16.x, which is the latest LTS version
+          node-version: '20'
 
-      # Step 3: Clean install dependencies
-      - name: Clean install dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install  # Reinstall dependencies
+      # Step 3: Install Wrangler (Cloudflare CLI)
+      - name: Install Wrangler
+        run: npm install -g wrangler
 
-      # Step 4: Build the app
-      - name: Build React App
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: npm ci  # Faster and more reliable than npm install
+
+      # Step 5: Build the application
+      - name: Build the app
         run: npm run build  
 
-      # Step 5: Check if build directory exists and compress it
-      - name: Check build directory and compress it
+      # Step 6: Verify the build output
+      - name: Check build directory
         run: |
-          if [ -d "./dist" ]; then
-            tar -czf dist.tar.gz -C dist .  # Compress the build folder
-          else
-            echo "Build directory not found!"
+          ls -l
+          if [ ! -d "./build" ]; then
+            echo "Error: Build directory not found!"
             exit 1
           fi
 
-      # Step 6: Deploy to Cloudflare Pages using the Cloudflare API
+      # Step 7: Deploy to Cloudflare Pages using Wrangler
       - name: Deploy to Cloudflare Pages
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_SITE_ID: ${{ secrets.CF_SITE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}   # Cloudflare API Token
+          CF_SITE_ID: ${{ secrets.CF_SITE_ID }}       # Cloudflare Site ID
         run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/pages/sites/$CF_SITE_ID/deployments" \
-          -H "Authorization: Bearer $CF_API_TOKEN" \
-          -F "file=@dist.tar.gz"  # Upload the compressed build folder
+          npx wrangler pages deploy ./build --project-name=testproject --branch=main --verbose
