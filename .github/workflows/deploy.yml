@@ -44,7 +44,6 @@ jobs:
       # Step 7: Deploy to Cloudflare Pages using Wrangler
       - name: Deploy to Cloudflare Pages
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}   # Cloudflare API Token
-          CF_SITE_ID: ${{ secrets.CF_SITE_ID }}       # Cloudflare Site ID
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}   # Use the correct env variable
         run: |
-          npx wrangler pages deploy ./dist --project-name=testproject --branch=main --verbose
+          npx wrangler pages deploy ./dist --project-name=testproject --branch=main
