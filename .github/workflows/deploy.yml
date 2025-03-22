@@ -14,28 +14,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
+      # Step 2: Set up Node.js (use '16.x' for the latest LTS version)
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Choose the correct Node.js version
+          node-version: '20'  # This uses Node.js version 16.x, which is the latest LTS version
 
       # Step 3: Clean install dependencies
       - name: Clean install dependencies
         run: |
-          rm -rf node_modules package-lock.json  # Remove existing dependencies
+          rm -rf node_modules package-lock.json
           npm install  # Reinstall dependencies
 
       # Step 4: Build the app
       - name: Build React App
         run: npm run build  
 
-      # Step 5: Deploy to Cloudflare Pages using the Cloudflare API
+      # Step 5: Check if build directory exists and compress it
+      - name: Check build directory and compress it
+        run: |
+          if [ -d "./build" ]; then
+            tar -czf build.tar.gz -C build .  # Compress the build folder
+          else
+            echo "Build directory not found!"
+            exit 1
+          fi
+
+      # Step 6: Deploy to Cloudflare Pages using the Cloudflare API
       - name: Deploy to Cloudflare Pages
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}  # Cloudflare API Token stored as a GitHub secret
-          CF_SITE_ID: ${{ secrets.CF_SITE_ID }}      # Cloudflare Pages Site ID stored as a GitHub secret
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_SITE_ID: ${{ secrets.CF_SITE_ID }}
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/pages/sites/$CF_SITE_ID/deployments" \
           -H "Authorization: Bearer $CF_API_TOKEN" \
-          -F "files[]=@./build/*"  # Deploy the contents of the 'build' folder to Cloudflare Pages
+          -F "file=@build.tar.gz"  # Upload the compressed build folder
