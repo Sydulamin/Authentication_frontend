@@ -33,8 +33,8 @@ jobs:
       # Step 5: Check if build directory exists and compress it
       - name: Check build directory and compress it
         run: |
-          if [ -d "./build" ]; then
-            tar -czf build.tar.gz -C build .  # Compress the build folder
+          if [ -d "./dist" ]; then
+            tar -czf dist.tar.gz -C dist .  # Compress the build folder
           else
             echo "Build directory not found!"
             exit 1
@@ -48,4 +48,4 @@ jobs:
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/pages/sites/$CF_SITE_ID/deployments" \
           -H "Authorization: Bearer $CF_API_TOKEN" \
-          -F "file=@build.tar.gz"  # Upload the compressed build folder
+          -F "file=@dist.tar.gz"  # Upload the compressed build folder
