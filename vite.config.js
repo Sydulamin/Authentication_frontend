@@ -1,19 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    nodePolyfills()  // Directly use the default export plugin
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
-      crypto: 'crypto-browserify'  // Polyfill for 'crypto'
+      crypto: 'crypto-browserify'  // Ensures compatibility with Node.js 'crypto'
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'  // Fix issues with 'global' in browser
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          process: true,
+          buffer: true
+        })
+      ]
     }
   },
   server: {
-    port: 3000  // Set the port to 3000 (or any other available port)
+    port: 3000
   }
 })
