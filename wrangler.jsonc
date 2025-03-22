@@ -1,8 +1,5 @@
 {
-    "name": "testproject",
-    "compatibility_date": "2025-03-22",
-    "assets": {
-      "directory": "./build"
-    }
-  }
-  
+  "name": "testproject",
+  "compatibility_date": "2025-03-22",
+  "pages_build_output_dir": "./dist"
+}
