@@ -43,8 +43,11 @@ jobs:
 
       # Step 7: Deploy to Cloudflare Pages using Wrangler
       - name: Deploy to Cloudflare Pages
-        env:
+        uses: cloudflare/pages-action@v1
+        with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_SITE_ID }}
-        run: |
-          npx wrangler pages deploy ./dist --project-name=testproject --branch=main
+          projectName: "testproject"  # Update with your Cloudflare Pages project name
+          directory: "./dist"  # Change this if using Vite (`dist/`)
+          branch: main   # Use the correct env variable
+        
