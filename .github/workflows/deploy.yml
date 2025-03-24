@@ -41,25 +41,25 @@ jobs:
             exit 1
           fi
       
-      - name: Install jq
-        run: sudo apt-get install jq
+      # - name: Install jq
+      #   run: sudo apt-get install jq
       
       
-      - name: Get Cloudflare Account ID
-        id: get_account_id
-        run: |
-          sudo apt-get install -y jq  # Ensure jq is installed
-          ACCOUNT_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts" \
-            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
-            -H "Content-Type: application/json" | jq -r '.result[0].id')
+      # - name: Get Cloudflare Account ID
+      #   id: get_account_id
+      #   run: |
+      #     sudo apt-get install -y jq  # Ensure jq is installed
+      #     ACCOUNT_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts" \
+      #       -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+      #       -H "Content-Type: application/json" | jq -r '.result[0].id')
       
-          if [ -z "$ACCOUNT_ID" ] || [ "$ACCOUNT_ID" == "null" ]; then
-            echo "❌ Failed to fetch Cloudflare Account ID!"
-            exit 1
-          fi
+      #     if [ -z "$ACCOUNT_ID" ] || [ "$ACCOUNT_ID" == "null" ]; then
+      #       echo "❌ Failed to fetch Cloudflare Account ID!"
+      #       exit 1
+      #     fi
       
-          echo "✅ Cloudflare Account ID: $ACCOUNT_ID"
-          echo "account_id=$ACCOUNT_ID" >> $GITHUB_ENV   
+      #     echo "✅ Cloudflare Account ID: $ACCOUNT_ID"
+      #     echo "account_id=$ACCOUNT_ID" >> $GITHUB_ENV   
 
 
       - name: Deploy to Cloudflare Pages
