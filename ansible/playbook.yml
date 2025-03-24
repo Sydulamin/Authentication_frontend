@@ -1,6 +1,6 @@
-- hosts: localhost
-
-  become: true
+---
+- hosts: web_servers
+  become: True
   tasks:
     - name: Update apt cache and install Nginx
       apt:
