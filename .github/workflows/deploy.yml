@@ -3,36 +3,30 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches:
-      - main  # Trigger deployment when pushing to the main branch
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20'
 
-      # Step 3: Install Wrangler (Cloudflare CLI)
       - name: Install Wrangler
         run: npm install -g wrangler
 
-      # Step 4: Install dependencies
       - name: Install dependencies
-        run: npm ci  # Faster and more reliable than npm install
+        run: npm ci 
 
-      # Step 5: Build the application
       - name: Build the app
         run: npm run build  
 
-      # Step 6: Verify the build output
       - name: Check build directory
         run: |
           ls -l
@@ -46,9 +40,9 @@ jobs:
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}  # Ensure this matches your Cloudflare Account ID
-          projectName: "authentication-frontend"  # Confirm the project name is correct
+          accountId: ${{ secrets.CF_ACCOUNT_ID }} 
+          projectName: "authentication-frontend" 
           directory: "./dist"
-          branch: "main"  # Verify the branch name
+          branch: "main" 
           wranglerVersion: 2
               
