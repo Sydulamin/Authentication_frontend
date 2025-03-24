@@ -8,6 +8,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Ansible to provision the web server
+      - name: Set up Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Provision Web Server with Ansible
+        run: |
+          echo "Provisioning web server with Ansible..."
+          # You can customize this with your Ansible commands, example:
+          ansible-playbook -i ansible/hosts ansible/playbook.yml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
 
     steps:
       - name: Checkout code

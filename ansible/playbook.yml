@@ -1,0 +1,15 @@
+- hosts: localhost
+
+  become: true
+  tasks:
+    - name: Update apt cache and install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
