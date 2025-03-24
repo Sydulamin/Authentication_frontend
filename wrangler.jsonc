@@ -1,5 +1,5 @@
 {
-  "name": "testprojectcreate",
+  "name": "authentication-frontend",
   "compatibility_date": "2025-03-22",
   "pages_build_output_dir": "./dist"
 }
