@@ -66,7 +66,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}  # Ensure this matches your Cloudflare Account ID
-          projectName: "testproject"  # Confirm the project name is correct
+          projectName: "testprojectcreate"  # Confirm the project name is correct
           directory: "./dist"
           branch: "main"  # Verify the branch name
           wranglerVersion: 2
